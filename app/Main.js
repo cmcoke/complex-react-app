@@ -12,8 +12,6 @@ import Terms from "./components/Terms";
 const Main = () => {
   return (
     <BrowserRouter>
-      {" "}
-      {/* test */}
       <Header />
       <Routes>
         <Route path="/" element={<HomeGuest />} />
