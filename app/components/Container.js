@@ -10,4 +10,6 @@ export default Container;
 
   {props.children} -- refers to the content that is nested inside the Container component
 
+  This component adds the 'container' class on pages.
+
 */
