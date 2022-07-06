@@ -1,19 +1,23 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-const ExampleComponent = () => {
+// My Components
+import Footer from "./components/Footer";
+import Header from "./components/Header";
+import HomeGuest from "./components/HomeGuest";
+
+const Main = () => {
   return (
-    <div>
-      <h1>This is our app!</h1>
-      <p>The sky is blue.</p>
-    </div>
+    <>
+      <Header />
+      <HomeGuest />
+      <Footer />
+    </>
   );
 };
 
-export default ExampleComponent;
-
 const root = ReactDOM.createRoot(document.querySelector("#app"));
-root.render(<ExampleComponent />);
+root.render(<Main />);
 
 // update changes to the browser without reloading the browser whenever a change has been made to a JS file.
 if (module.hot) {
