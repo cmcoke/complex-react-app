@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import HeaderLoggedIn from "./HeaderLoggedIn";
+import HeaderLoggedOut from "./HeaderLoggedOut";
 
 const Header = () => {
+  /* Boolean(localStorage.getItem("complexappToken") -- if "complexappToken" exists in local storage set 'loggedIn' to true if not set it to false */
+  const [loggedIn, setLoggedIn] = useState(Boolean(localStorage.getItem("complexappToken")));
+
   return (
     <header className="header-bar bg-primary mb-3">
       <div className="container d-flex flex-column flex-md-row align-items-center p-3">
@@ -10,19 +15,8 @@ const Header = () => {
             ComplexApp
           </Link>
         </h4>
-        <form className="mb-0 pt-2 pt-md-0">
-          <div className="row align-items-center">
-            <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-              <input name="username" className="form-control form-control-sm input-dark" type="text" placeholder="Username" autoComplete="off" />
-            </div>
-            <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-              <input name="password" className="form-control form-control-sm input-dark" type="password" placeholder="Password" />
-            </div>
-            <div className="col-md-auto">
-              <button className="btn btn-success btn-sm">Sign In</button>
-            </div>
-          </div>
-        </form>
+        {/* if 'loggedIn' is true render the 'HeaderLoggedIn' component else render the 'HeaderLoggedOut' component  */}
+        {loggedIn ? <HeaderLoggedIn setLoggedIn={setLoggedIn} /> : <HeaderLoggedOut setLoggedIn={setLoggedIn} />}
       </div>
     </header>
   );
