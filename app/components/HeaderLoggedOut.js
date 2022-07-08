@@ -20,14 +20,14 @@ const HeaderLoggedOut = props => {
       const response = await Axios.post("http://localhost:8080/login", { username, password });
 
       /* outputs the avatar, token & username associated the user account */
-      console.log(response.data);
+      // console.log(response.data);
 
       /* adds the user' avatar, token & username to the browser' local storage. This ensures that when the user is logged in, they stay logged in incase the browser refreashs or closes */
       localStorage.setItem("complexappAvatar", response.data.avatar);
       localStorage.setItem("complexappToken", response.data.token);
       localStorage.setItem("complexappUsername", response.data.username);
 
-      /* update the "loggedIn" state in the "Header" component to true if the username & password are correct render the 'HeaderLoggedIn' component */
+      /* update the "loggedIn" state in the "Main" component to true if the username & password are correct render the 'HeaderLoggedIn' component */
       props.setLoggedIn(true);
     } catch (error) {
       console.log(error.response.data);

@@ -2,7 +2,7 @@ import React from "react";
 
 const HeaderLoggedIn = props => {
   const handleLogout = () => {
-    /* update the "loggedIn" state in the "Header" component to false when the user clicks the sign out button render the 'HeaderLoggedOut' component */
+    /* update the "loggedIn" state in the "Main" component to false when the user clicks the sign out button render the 'HeaderLoggedOut' component */
     props.setLoggedIn(false);
 
     /* when the user is logged out remove their avatar, token and username that is stored in the browser' local storage. This ensures that they remain logged out. */
