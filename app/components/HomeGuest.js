@@ -14,13 +14,13 @@ const HomeGuest = () => {
       /*
       using the axios libary to send a post request to the "MangoDB" database
 
-       http://localhost:8080 -- is the url that the request is sent to
+       http://localhost:8080 -- is the url that the request is sent to. (starting from lesson 37, Axios default base url is set in the "Main" component. This allows only "/register" to be used.)
 
        /register -- is the action that should be taken
 
        { username, email, password } -- refers to the data that is sent to the server ( username, email, password -- are the names of the states as created in lines 6 - 8 )
     */
-      await Axios.post("http://localhost:8080/register", { username, email, password });
+      await Axios.post("/register", { username, email, password });
       console.log("User was successfully created");
     } catch (error) {
       console.log(error.response.data);

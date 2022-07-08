@@ -11,13 +11,13 @@ const HeaderLoggedOut = props => {
       /*
       using the axios libary to send a post request to the "MangoDB" database
 
-       http://localhost:8080 -- is the url that the request is sent to
+       http://localhost:8080 -- is the url that the request is sent to (starting from lesson 37, Axios default base url is set in the "Main" component. This allows only "/login" to be used.)
 
        /login -- is the action that should be taken
 
        { username, password } -- refers to the data that is sent to the server ( username, password -- are the names of the states as created in lines 6 - 8 )
     */
-      const response = await Axios.post("http://localhost:8080/login", { username, password });
+      const response = await Axios.post("/login", { username, password });
 
       /* outputs the avatar, token & username associated the user account */
       // console.log(response.data);
