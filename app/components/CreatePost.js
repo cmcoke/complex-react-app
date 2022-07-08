@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Page from "./Page";
 import Axios from "axios";
 
 const CreatePost = () => {
   const [title, setTitle] = useState();
   const [body, setBody] = useState();
+  const navigate = useNavigate(); // allows for the redirection to another url
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -19,7 +21,13 @@ const CreatePost = () => {
        token: localStorage.getItem("complexappToken") -- this ensures that the database accepts the request from a user that is on the database
        
     */
-      await Axios.post("/create-post", { title, body, token: localStorage.getItem("complexappToken") });
+      const response = await Axios.post("/create-post", { title, body, token: localStorage.getItem("complexappToken") });
+      /* 
+        Redirects to the url of the new post that was created. 
+        
+        ${response.data} -- is the id of the new post
+      */
+      navigate(`/post/${response.data}`);
     } catch (error) {
       console.log(error.response.data);
     }
