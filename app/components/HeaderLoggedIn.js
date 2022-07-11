@@ -1,13 +1,12 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import ExampleContent from "../ExampleContext"; // imports the component that allows for the use of React's context feature
+import DispatchContent from "../DispatchContext";
 
 const HeaderLoggedIn = props => {
-  const { setLoggedIn } = useContext(ExampleContent); // get the 'setLoggedIn' value that was passed to the 'ExampleContent.Provider' component in the 'Main' component.
+  const appDispatch = useContext(DispatchContent);
 
   const handleLogout = () => {
-    /* update the "loggedIn" state in the "Main" component to false when the user clicks the sign out button render the 'HeaderLoggedOut' component */
-    setLoggedIn(false);
+    appDispatch({ type: "logout" });
 
     /* when the user is logged out remove their avatar, token and username that is stored in the browser' local storage. This ensures that they remain logged out. */
     localStorage.removeItem("complexappAvatar");

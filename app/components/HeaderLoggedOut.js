@@ -1,11 +1,11 @@
 import React, { useState, useContext } from "react";
 import Axios from "axios";
-import ExampleContent from "../ExampleContext"; // imports the component that allows for the use of React's context feature
+import DispatchContent from "../DispatchContext";
 
 const HeaderLoggedOut = props => {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
-  const { setLoggedIn } = useContext(ExampleContent); // get the 'setLoggedIn' value that was passed to the 'ExampleContent.Provider' component in the 'Main' component.
+  const appDispatch = useContext(DispatchContent);
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -30,8 +30,7 @@ const HeaderLoggedOut = props => {
         localStorage.setItem("complexappToken", response.data.token);
         localStorage.setItem("complexappUsername", response.data.username);
 
-        /* update the "loggedIn" state in the "Main" component to true if the username & password are correct and then render the 'HeaderLoggedIn' component */
-        setLoggedIn(true);
+        appDispatch({ type: "login" });
       } else {
         console.log("Incorrect username / password");
       }

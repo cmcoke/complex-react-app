@@ -2,13 +2,13 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Page from "./Page";
 import Axios from "axios";
-import ExampleContent from "../ExampleContext"; // imports the component that allows for the use of React's context feature
+import DispatchContent from "../DispatchContext";
 
 const CreatePost = props => {
   const [title, setTitle] = useState();
   const [body, setBody] = useState();
   const navigate = useNavigate(); // allows for the redirection to another url
-  const { addFlashMessage } = useContext(ExampleContent); // get the 'addFlashMessage' value that was passed to the 'ExampleContent.Provider' component in the 'Main' component.
+  const appDispatch = useContext(DispatchContent);
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -24,8 +24,8 @@ const CreatePost = props => {
        
     */
       const response = await Axios.post("/create-post", { title, body, token: localStorage.getItem("complexappToken") });
-      /* when the post has beeen submitted the addFlashMessage() will execute with the stated message passed as the argument */
-      addFlashMessage("Congrats, you successfully created a post. React Context Works"); // addFlashMessage() comes from the 'ExampleContent.Provider' component in which it was passed from
+
+      appDispatch({ type: "flashMessage", value: "Congrats, you successfully created a post." });
 
       /* 
         Redirects to the url of the new post that was created. 
