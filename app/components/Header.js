@@ -13,7 +13,7 @@ const Header = props => {
           </Link>
         </h4>
         {/* if 'loggedIn' is true render the 'HeaderLoggedIn' component else render the 'HeaderLoggedOut' component  */}
-        {props.loggedIn ? <HeaderLoggedIn setLoggedIn={props.setLoggedIn} /> : <HeaderLoggedOut setLoggedIn={props.setLoggedIn} />}
+        {props.loggedIn ? <HeaderLoggedIn /> : <HeaderLoggedOut />}
       </div>
     </header>
   );

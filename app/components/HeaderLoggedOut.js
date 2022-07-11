@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Axios from "axios";
+import ExampleContent from "../ExampleContext"; // imports the component that allows for the use of React's context feature
 
 const HeaderLoggedOut = props => {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
+  const { setLoggedIn } = useContext(ExampleContent); // get the 'setLoggedIn' value that was passed to the 'ExampleContent.Provider' component in the 'Main' component.
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -19,16 +21,20 @@ const HeaderLoggedOut = props => {
     */
       const response = await Axios.post("/login", { username, password });
 
-      /* outputs the avatar, token & username associated the user account */
+      /* outputs an object that is the data (avatar, token & username associated the user account) from the "MangoDB" database  */
       // console.log(response.data);
 
-      /* adds the user' avatar, token & username to the browser' local storage. This ensures that when the user is logged in, they stay logged in incase the browser refreashs or closes */
-      localStorage.setItem("complexappAvatar", response.data.avatar);
-      localStorage.setItem("complexappToken", response.data.token);
-      localStorage.setItem("complexappUsername", response.data.username);
+      if (response.data) {
+        /* adds the user' avatar, token & username to the browser' local storage. This ensures that when the user is logged in, they stay logged in incase the browser refreashs or closes */
+        localStorage.setItem("complexappAvatar", response.data.avatar);
+        localStorage.setItem("complexappToken", response.data.token);
+        localStorage.setItem("complexappUsername", response.data.username);
 
-      /* update the "loggedIn" state in the "Main" component to true if the username & password are correct render the 'HeaderLoggedIn' component */
-      props.setLoggedIn(true);
+        /* update the "loggedIn" state in the "Main" component to true if the username & password are correct and then render the 'HeaderLoggedIn' component */
+        setLoggedIn(true);
+      } else {
+        console.log("Incorrect username / password");
+      }
     } catch (error) {
       console.log(error.response.data);
     }

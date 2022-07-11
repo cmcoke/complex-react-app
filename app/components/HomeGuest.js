@@ -3,6 +3,7 @@ import Page from "./Page";
 import Axios from "axios";
 
 const HomeGuest = () => {
+  // tracks the input values enter into the username, email & password fields
   const [username, setUsername] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
