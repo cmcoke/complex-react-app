@@ -22,9 +22,12 @@ const Profile = () => {
 
   // sends a request to the MangoDB database for the current user' data
   useEffect(() => {
+    // identify the axios request by givining it an cancel token, so that it can be used in the useEffect() clean function in lines 35 - 37
+    const ourRequest = Axios.CancelToken.source();
+
     const fetchData = async () => {
       try {
-        const response = await Axios.post(`/profile/${username}`, { token: appState.user.token });
+        const response = await Axios.post(`/profile/${username}`, { token: appState.user.token }, { cancelToken: ourRequest.token });
         // console.log(response.data); // outputs an object that contains the current user's -- profile name, profile avatar, is following and another object called counts that contain post count, followers count & following count
         setProfileData(response.data);
       } catch (error) {
@@ -32,6 +35,11 @@ const Profile = () => {
       }
     };
     fetchData();
+
+    // uses the useEffect() clean up function  when the component is no longer in use.
+    return () => {
+      ourRequest.cancel();
+    };
   }, []);
 
   return (
