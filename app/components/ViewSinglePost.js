@@ -3,6 +3,7 @@ import Page from "./Page";
 import Axios from "axios";
 import { useParams, Link } from "react-router-dom";
 import LoadingDotsIcon from "./LoadingDotsIcon";
+import ReactMarkdown from "react-markdown"; // allows markdown text in React (a list of different markdowns -- https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
 
 const ViewSinglePost = () => {
   // tracks if the request to the database is finished loading or not
@@ -72,7 +73,10 @@ const ViewSinglePost = () => {
         Posted by <Link to={`/profile/${post.author.username}`}>{post.author.username}</Link> on {dateFormatted}
       </p>
 
-      <div className="body-content">{post.body}</div>
+      <div className="body-content">
+        {/* uses the ReactMarkdown component to write markdown text */}
+        <ReactMarkdown children={post.body} allowedElements={["p", "br", "strong", "em", "h1", "h2", "h3", "h4", "h5", "h6", "ul", "li"]} />
+      </div>
     </Page>
   );
 };
