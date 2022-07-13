@@ -29,7 +29,7 @@ const HomeGuest = () => {
   };
 
   return (
-    <Page wide={true} title={"Welcome !!!"}>
+    <Page wide={true} title="Welcome !!!">
       <div className="row align-items-center">
         <div className="col-lg-7 py-3 py-md-5">
           <h1 className="display-3">Remember Writing?</h1>

@@ -25,12 +25,7 @@ const HeaderLoggedOut = props => {
       // console.log(response.data);
 
       if (response.data) {
-        /* adds the user' avatar, token & username to the browser' local storage. This ensures that when the user is logged in, they stay logged in incase the browser refreashs or closes */
-        localStorage.setItem("complexappAvatar", response.data.avatar);
-        localStorage.setItem("complexappToken", response.data.token);
-        localStorage.setItem("complexappUsername", response.data.username);
-
-        appDispatch({ type: "login" });
+        appDispatch({ type: "login", data: response.data });
       } else {
         console.log("Incorrect username / password");
       }

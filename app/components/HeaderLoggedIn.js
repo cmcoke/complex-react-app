@@ -1,17 +1,14 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import DispatchContent from "../DispatchContext";
+import StateContent from "../StateContext";
 
 const HeaderLoggedIn = props => {
   const appDispatch = useContext(DispatchContent);
+  const appState = useContext(StateContent);
 
   const handleLogout = () => {
     appDispatch({ type: "logout" });
-
-    /* when the user is logged out remove their avatar, token and username that is stored in the browser' local storage. This ensures that they remain logged out. */
-    localStorage.removeItem("complexappAvatar");
-    localStorage.removeItem("complexappToken");
-    localStorage.removeItem("complexappUsername");
   };
 
   return (
@@ -24,7 +21,7 @@ const HeaderLoggedIn = props => {
         <span className="chat-count-badge text-white"> </span>
       </span>
       <a href="#" className="mr-2">
-        <img className="small-header-avatar" src={localStorage.getItem("complexappAvatar")} />
+        <img className="small-header-avatar" src={appState.user.avatar} />
       </a>
       <Link className="btn btn-sm btn-success mr-2" to="/create-post">
         Create Post

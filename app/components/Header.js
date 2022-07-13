@@ -15,7 +15,6 @@ const Header = props => {
             ComplexApp
           </Link>
         </h4>
-        {/* if 'loggedIn' is true render the 'HeaderLoggedIn' component else render the 'HeaderLoggedOut' component  */}
         {appState.loggedIn ? <HeaderLoggedIn /> : <HeaderLoggedOut />}
       </div>
     </header>

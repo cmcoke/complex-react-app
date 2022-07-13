@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Axios from "axios";
@@ -46,7 +46,13 @@ const Main = () => {
   /* useReducer configs */
   const initialState = {
     loggedIn: Boolean(localStorage.getItem("complexappToken")) /* Boolean(localStorage.getItem("complexappToken") -- if "complexappToken" exists in local storage set 'loggedIn' to true if not set it to false */,
-    flashMessages: []
+    flashMessages: [],
+    /* the user object gets the stated data from localStorage */
+    user: {
+      token: localStorage.getItem("complexappToken"),
+      username: localStorage.getItem("complexappUsername"),
+      avatar: localStorage.getItem("complexappAvatar")
+    }
   };
 
   /*
@@ -63,6 +69,8 @@ const Main = () => {
     switch (action.type) {
       case "login":
         draft.loggedIn = true;
+        /* relates to data from the localStorage */
+        draft.user = action.data;
         return;
 
       case "logout":
@@ -77,6 +85,19 @@ const Main = () => {
 
   // const [state, dispatch] = useReducer(ourReducer, initialState);
   const [state, dispatch] = useImmerReducer(ourReducer, initialState); // use the immer library to handle useReducer actions
+
+  // if state.loggedIn is true store login data in localStorage else remove it
+  useEffect(() => {
+    if (state.loggedIn) {
+      localStorage.setItem("complexappAvatar", state.user.avatar);
+      localStorage.setItem("complexappToken", state.user.token);
+      localStorage.setItem("complexappUsername", state.user.username);
+    } else {
+      localStorage.removeItem("complexappAvatar");
+      localStorage.removeItem("complexappToken");
+      localStorage.removeItem("complexappUsername");
+    }
+  }, [state.loggedIn]);
 
   return (
     <StateContext.Provider value={state}>

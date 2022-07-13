@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import Page from "./Page";
 import Axios from "axios";
 import DispatchContent from "../DispatchContext";
+import StateContent from "../StateContext";
 
 const CreatePost = props => {
   const [title, setTitle] = useState();
   const [body, setBody] = useState();
   const navigate = useNavigate(); // allows for the redirection to another url
   const appDispatch = useContext(DispatchContent);
+  const appState = useContext(StateContent);
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -20,10 +22,10 @@ const CreatePost = props => {
 
        { title, body, token } -- refers to the data that is sent to the server ( title & body -- are the names of the states as created in lines 6 - 7 )
 
-       token: localStorage.getItem("complexappToken") -- this ensures that the database accepts the request from a user that is on the database
+       token: appState.user.token -- this ensures that the database accepts the request from a user that is on the database
        
     */
-      const response = await Axios.post("/create-post", { title, body, token: localStorage.getItem("complexappToken") });
+      const response = await Axios.post("/create-post", { title, body, token: appState.user.token });
 
       appDispatch({ type: "flashMessage", value: "Congrats, you successfully created a post." });
 
@@ -33,13 +35,14 @@ const CreatePost = props => {
         ${response.data} -- is the id of the new post
       */
       navigate(`/post/${response.data}`);
+      console.log("New post was created.");
     } catch (error) {
       console.log(error.response.data);
     }
   };
 
   return (
-    <Page title={"Create New Post"}>
+    <Page title="Create New Post">
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="post-title" className="text-muted mb-1">
