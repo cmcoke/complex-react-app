@@ -5,6 +5,9 @@ import Axios from "axios";
 Axios.defaults.baseURL = "http://localhost:8080"; // sets axios default url
 import { useImmerReducer } from "use-immer";
 
+import StateContext from "./StateContext"; /* import the component that allows for the use of React' context for state  */
+import DispatchContext from "./DispatchContext"; /* import the component that allows for the use of React' context for dispatch  */
+
 // My Components
 import About from "./components/About";
 import CreatePost from "./components/CreatePost";
@@ -15,8 +18,7 @@ import HomeGuest from "./components/HomeGuest";
 import Terms from "./components/Terms";
 import ViewSinglePost from "./components/ViewSinglePost";
 import FlashMessages from "./components/FlashMessages";
-import StateContext from "./StateContext"; /* import the component that allows for the use of React' context for state  */
-import DispatchContext from "./DispatchContext"; /* import the component that allows for the use of React' context for dispatch  */
+import Profile from "./components/Profile";
 
 const Main = () => {
   /*
@@ -106,6 +108,11 @@ const Main = () => {
           <FlashMessages messages={state.flashMessages} />
           <Header />
           <Routes>
+            {/* 
+              /:username -- is a variable that refers to the user' username 
+              /* -- is used for sub-routes (Ex. /following or /followers)
+            */}
+            <Route path="/profile/:username/*" element={<Profile />} />
             {/* if the user is logged in render the "Home" component if not render the "HomeGuest" */}
             <Route path="/" element={state.loggedIn ? <Home /> : <HomeGuest />} />
             {/* "/:id" -- represents a parameter that is unique to every post that is created */}
