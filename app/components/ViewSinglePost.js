@@ -1,13 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Page from "./Page";
 import Axios from "axios";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import LoadingDotsIcon from "./LoadingDotsIcon";
 import ReactMarkdown from "react-markdown"; // allows markdown text in React (a list of different markdowns -- https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
 import ReactTooltip from "react-tooltip";
 import NotFound from "./NotFound";
+import StateContext from "../StateContext";
+import DispatchContext from "../DispatchContext";
 
 const ViewSinglePost = () => {
+  const appState = useContext(StateContext);
+  const appDispatch = useContext(DispatchContext);
+  const navigate = useNavigate();
+
   // tracks if the request to the database is finished loading or not
   const [isLoading, setIsLoading] = useState(true);
 
@@ -59,22 +65,51 @@ const ViewSinglePost = () => {
   // formats the date to output month/date/year
   const dateFormatted = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
 
+  // if you are logged in a the owner of the post display the edit & delete icons
+  const isOwner = () => {
+    if (appState.loggedIn) {
+      return appState.user.username == post.author.username;
+    }
+    return false;
+  };
+
+  // deletes a post
+  const handleDelete = async () => {
+    const areYouSure = window.confirm("Do you really want to delete this post?");
+    // if the user click the okay button when asked "Do you really want to delete this post?" then send a delete request to the datanase
+    if (areYouSure) {
+      try {
+        const response = await Axios.delete(`/post/${id}`, { data: { token: appState.user.token } }); // sends a delete request to the database with the user' token which is used for authentication with database
+        // if the database responsed with a  "Success"
+        if (response.data == "Success") {
+          appDispatch({ type: "flashMessage", value: "the post was deleted successfully" }); // display the message "the post was deleted successfully"
+          navigate(`/profile/${appState.user.username}`); // redirect to the home screen
+        }
+      } catch (error) {
+        console.log("there was a problem");
+      }
+    }
+  };
+
   return (
     <Page title={post.title}>
       <div className="d-flex justify-content-between">
         <h2>{post.title}</h2>
-        <span className="pt-2">
-          <Link to={`/post/${post._id}/edit`} data-tip="Edit" data-for="edit" className="text-primary mr-2">
-            <i className="fas fa-edit"></i>
-          </Link>
-          {/* adds a tooltip for the edit icon when a user hover over it. 'data-tip="Edit" & data-for="edit"' in the a tag above are used to associate with '<ReactTooltip id="edit"/>'  */}
-          <ReactTooltip id="edit" className="custom-tooltip" />{" "}
-          <a data-tip="Delete" data-for="delete" className="delete-post-button text-danger">
-            <i className="fas fa-trash"></i>
-          </a>
-          {/* adds a tooltip for the edit icon when a user hover over it. 'data-tip="Delete" & data-for="delete"' in the a tag above are used to associate with '<ReactTooltip id="delete"/>'  */}
-          <ReactTooltip id="delete" className="custom-tooltip" />
-        </span>
+        {/* if the current user created the post display the edit & delete icons */}
+        {isOwner() && (
+          <span className="pt-2">
+            <Link to={`/post/${post._id}/edit`} data-tip="Edit" data-for="edit" className="text-primary mr-2">
+              <i className="fas fa-edit"></i>
+            </Link>
+            {/* adds a tooltip for the edit icon when a user hover over it. 'data-tip="Edit" & data-for="edit"' in the a tag above are used to associate with '<ReactTooltip id="edit"/>'  */}
+            <ReactTooltip id="edit" className="custom-tooltip" />{" "}
+            <a onClick={handleDelete} data-tip="Delete" data-for="delete" className="delete-post-button text-danger">
+              <i className="fas fa-trash"></i>
+            </a>
+            {/* adds a tooltip for the edit icon when a user hover over it. 'data-tip="Delete" & data-for="delete"' in the a tag above are used to associate with '<ReactTooltip id="delete"/>'  */}
+            <ReactTooltip id="delete" className="custom-tooltip" />
+          </span>
+        )}
       </div>
 
       <p className="text-muted small mb-4">
