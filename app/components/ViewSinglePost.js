@@ -4,6 +4,8 @@ import Axios from "axios";
 import { useParams, Link } from "react-router-dom";
 import LoadingDotsIcon from "./LoadingDotsIcon";
 import ReactMarkdown from "react-markdown"; // allows markdown text in React (a list of different markdowns -- https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+import ReactTooltip from "react-tooltip";
+import NotFound from "./NotFound";
 
 const ViewSinglePost = () => {
   // tracks if the request to the database is finished loading or not
@@ -39,6 +41,11 @@ const ViewSinglePost = () => {
     };
   }, []);
 
+  // if a page does not exist output the stated JSX
+  if (!isLoading && !post) {
+    return <NotFound />;
+  }
+
   // if isLoading is true return the 'LoadingDotsIcon' component
   if (isLoading)
     return (
@@ -57,12 +64,16 @@ const ViewSinglePost = () => {
       <div className="d-flex justify-content-between">
         <h2>{post.title}</h2>
         <span className="pt-2">
-          <a href="#" className="text-primary mr-2" title="Edit">
+          <Link to={`/post/${post._id}/edit`} data-tip="Edit" data-for="edit" className="text-primary mr-2">
             <i className="fas fa-edit"></i>
-          </a>
-          <a className="delete-post-button text-danger" title="Delete">
+          </Link>
+          {/* adds a tooltip for the edit icon when a user hover over it. 'data-tip="Edit" & data-for="edit"' in the a tag above are used to associate with '<ReactTooltip id="edit"/>'  */}
+          <ReactTooltip id="edit" className="custom-tooltip" />{" "}
+          <a data-tip="Delete" data-for="delete" className="delete-post-button text-danger">
             <i className="fas fa-trash"></i>
           </a>
+          {/* adds a tooltip for the edit icon when a user hover over it. 'data-tip="Delete" & data-for="delete"' in the a tag above are used to associate with '<ReactTooltip id="delete"/>'  */}
+          <ReactTooltip id="delete" className="custom-tooltip" />
         </span>
       </div>
 
