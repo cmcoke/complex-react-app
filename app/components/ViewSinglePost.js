@@ -45,7 +45,7 @@ const ViewSinglePost = () => {
     return () => {
       ourRequest.cancel();
     };
-  }, []);
+  }, [id]);
 
   // if a page does not exist output the stated JSX
   if (!isLoading && !post) {

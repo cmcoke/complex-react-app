@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Axios from "axios";
 Axios.defaults.baseURL = "http://localhost:8080"; // sets axios default url
 import { useImmerReducer } from "use-immer";
+import { CSSTransition } from "react-transition-group"; // is used to handle css transition for an element.
 
 import StateContext from "./StateContext"; /* import the component that allows for the use of React' context for state  */
 import DispatchContext from "./DispatchContext"; /* import the component that allows for the use of React' context for dispatch  */
@@ -21,6 +22,7 @@ import FlashMessages from "./components/FlashMessages";
 import Profile from "./components/Profile";
 import EditPost from "./components/EditPost";
 import NotFound from "./components/NotFound";
+import Search from "./components/Search";
 
 const Main = () => {
   /*
@@ -56,7 +58,8 @@ const Main = () => {
       token: localStorage.getItem("complexappToken"),
       username: localStorage.getItem("complexappUsername"),
       avatar: localStorage.getItem("complexappAvatar")
-    }
+    },
+    isSearchOpen: false
   };
 
   /*
@@ -83,6 +86,14 @@ const Main = () => {
 
       case "flashMessage":
         draft.flashMessages.push(action.value);
+        return;
+
+      case "openSearch":
+        draft.isSearchOpen = true;
+        return;
+
+      case "closeSearch":
+        draft.isSearchOpen = false;
         return;
     }
   };
@@ -125,6 +136,22 @@ const Main = () => {
             <Route path="/terms" element={<Terms />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          {/* 
+          
+              CSSTransition is used to handle css transition for an element.
+
+              timeout -- refers to many milli-seconds the css tranisition takes to complete
+
+              in -- a boolean value
+
+              classNames -- the css classes that should be used on the component
+
+              unmountOnExit -- remove the component from the DOM when 'in' is false
+            
+          */}
+          <CSSTransition timeout={330} in={state.isSearchOpen} classNames="search-overlay" unmountOnExit>
+            <Search />
+          </CSSTransition>
           <Footer />
         </BrowserRouter>
       </DispatchContext.Provider>
