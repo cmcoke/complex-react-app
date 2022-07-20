@@ -3,7 +3,7 @@ import Axios from "axios";
 import { useParams, Link } from "react-router-dom";
 import LoadingDotsIcon from "./LoadingDotsIcon";
 
-const ProfilePosts = () => {
+const ProfileFollowing = () => {
   // tracks if the request to the database is finished loading or not
   const [isLoading, setIsLoading] = useState(true);
 
@@ -21,7 +21,7 @@ const ProfilePosts = () => {
     const fetchPosts = async () => {
       try {
         // { cancelToken: ourRequest.token } -- used to identify the axios request
-        const response = await Axios.get(`/profile/${username}/posts`, { cancelToken: ourRequest.token });
+        const response = await Axios.get(`/profile/${username}/following`, { cancelToken: ourRequest.token });
         // console.log(response.data); // outputs an object containing the different post' that the user created
         setPosts(response.data);
         setIsLoading(false);
@@ -42,15 +42,10 @@ const ProfilePosts = () => {
 
   return (
     <div className="list-group">
-      {posts.map(post => {
-        // gets the month, date & year in which the post was created
-        const date = new Date(post.createdDate);
-        // formats the date to output month/date/year
-        const dateFormatted = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-
+      {posts.map((follower, index) => {
         return (
-          <Link key={post._id} to={`/post/${post._id}`} className="list-group-item list-group-item-action">
-            <img className="avatar-tiny" src={post.author.avatar} /> <strong>{post.title}</strong> <span className="text-muted small">on {dateFormatted} </span>
+          <Link key={index} to={`/profile/${follower.username}`} className="list-group-item list-group-item-action">
+            <img className="avatar-tiny" src={follower.avatar} /> {follower.username}
           </Link>
         );
       })}
@@ -58,4 +53,4 @@ const ProfilePosts = () => {
   );
 };
 
-export default ProfilePosts;
+export default ProfileFollowing;
