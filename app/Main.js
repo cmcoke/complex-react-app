@@ -23,6 +23,7 @@ import Profile from "./components/Profile";
 import EditPost from "./components/EditPost";
 import NotFound from "./components/NotFound";
 import Search from "./components/Search";
+import Chat from "./components/Chat";
 
 const Main = () => {
   /*
@@ -59,7 +60,9 @@ const Main = () => {
       username: localStorage.getItem("complexappUsername"),
       avatar: localStorage.getItem("complexappAvatar")
     },
-    isSearchOpen: false
+    isSearchOpen: false, // ensure that the serch overlay does not show by default
+    isChatOpen: false, // ensure that the chat message box does not show by default
+    unreadChatCount: 0
   };
 
   /*
@@ -76,8 +79,7 @@ const Main = () => {
     switch (action.type) {
       case "login":
         draft.loggedIn = true;
-        /* relates to data from the localStorage */
-        draft.user = action.data;
+        draft.user = action.data; // relates to data from the localStorage
         return;
 
       case "logout":
@@ -94,6 +96,22 @@ const Main = () => {
 
       case "closeSearch":
         draft.isSearchOpen = false;
+        return;
+
+      case "toggleChat":
+        draft.isChatOpen = !draft.isChatOpen; // allows isChatOpen to be true (open the chat ) or false (close the chat) when clicking the chat icon on the header section
+        return;
+
+      case "closeChat":
+        draft.isChatOpen = false;
+        return;
+
+      case "incrementUnreadChatCount":
+        draft.unreadChatCount++;
+        return;
+
+      case "clearUnreadChatCount":
+        draft.unreadChatCount = 0;
         return;
     }
   };
@@ -152,6 +170,7 @@ const Main = () => {
           <CSSTransition timeout={330} in={state.isSearchOpen} classNames="search-overlay" unmountOnExit>
             <Search />
           </CSSTransition>
+          <Chat />
           <Footer />
         </BrowserRouter>
       </DispatchContext.Provider>
